@@ -61,19 +61,6 @@ services:
             tmpDir:
               path: /tmp/kestra-wd/tmp
           url: http://localhost:8080/
-            
-          # # OpenRouter — uses raw key (not base64)
-          # ai:
-          #   enabled: true
-          #   providers:
-          #     - id: openrouter
-          #       display-name: OpenRouter
-          #       type: openai
-          #       isDefault: true
-          #       configuration:
-          #         model-name: cohere/north-mini-code:free
-          #         api-key: ${OPENROUTER_API_KEY}
-          #         base-url: https://openrouter.ai/api/v1
 
           # Gemini — uses raw key (not base64)
           ai:
@@ -86,18 +73,6 @@ services:
                 configuration:
                   model-name: gemini-2.5-flash
                   api-key: ${GEMINI_API_KEY}
-
-          # # Ollama (requires extra_hosts below)
-          # ai:
-          #   enabled: true
-          #   providers:
-          #     - id: ollama
-          #       display-name: Ollama Local
-          #       type: ollama
-          #       isDefault: true
-          #       configuration:
-          #         model-name: llama3.2
-          #         endpoint: http://host.docker.internal:11434
 
     ports:
       - "8080:8080"
