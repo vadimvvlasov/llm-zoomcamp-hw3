@@ -7,7 +7,7 @@ The quality of an LLM's response depends not so much on the model's power as on 
 
 Prompt: `Create a Kestra flow that loads NYC taxi data from CSV to BigQuery`  
 
-chatgpt  
+**chatgpt**  
 ```yaml
 id: nyc_taxi_csv_to_bigquery
 namespace: demo.bigquery
@@ -77,7 +77,29 @@ tasks:
     autodetect: false
     skipLeadingRows: 1
 ```
+**ChatGPT's flow has an error**:
+> Validation error: Unrecognized field "bucket" (class io.kestra.plugin.gcp.gcs.Upload) not marked as ignorable (28 known properties: ...)
 
-Kestra's AI Copilot  
+**Kestra's AI Copilot**  
 ```yaml
+id: mink_737973
+namespace: company.team
+
+tasks:
+  - id: download_taxi_data
+    type: io.kestra.plugin.core.http.Download
+    uri: https://raw.githubusercontent.com/plotly/datasets/master/Taxi%20Trip%20Data.csv
+  - id: load_to_bigquery
+    type: io.kestra.plugin.gcp.bigquery.Load
+    from: "{{ outputs.download_taxi_data.uri }}"
+    destinationTable: "your_project_id.your_dataset.nyc_taxi_data" # Replace with your BigQuery project, dataset, and table
+    format: CSV
+    autodetect: true
+    csvOptions:
+      fieldDelimiter: ","
+    # If your BigQuery project requires a specific service account, uncomment and set the following:
+    # serviceAccount: "{{ secret('GCP_SERVICE_ACCOUNT') }}"
+    # projectId: "your_project_id" # Replace with your GCP project ID
 ```
+
+![Flow Graph](img/flow-graph-1782626054080.png)
