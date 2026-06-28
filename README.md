@@ -7,7 +7,9 @@ The quality of an LLM's response depends not so much on the model's power as on 
 
 Prompt: `Create a Kestra flow that loads NYC taxi data from CSV to BigQuery`  
 
-**chatgpt**  
+**ChatGPT's flow has an error**:
+> Validation error: Unrecognized field "bucket" (class io.kestra.plugin.gcp.gcs.Upload) not marked as ignorable (28 known properties: ...)
+
 ```yaml
 id: nyc_taxi_csv_to_bigquery
 namespace: demo.bigquery
@@ -77,10 +79,9 @@ tasks:
     autodetect: false
     skipLeadingRows: 1
 ```
-**ChatGPT's flow has an error**:
-> Validation error: Unrecognized field "bucket" (class io.kestra.plugin.gcp.gcs.Upload) not marked as ignorable (28 known properties: ...)
 
-**Kestra's AI Copilot**  
+**Kestra's AI Copilot**
+Looks reasonable.  
 ```yaml
 id: mink_737973
 namespace: company.team
@@ -103,3 +104,60 @@ tasks:
 ```
 
 ![Flow Graph](img/flow-graph-1782626054080.png)
+
+## Question 2: RAG vs No RAG
+
+Run both 1_chat_without_rag.yaml and 2_chat_with_rag.yaml in the Kestra UI. Read the execution logs for each.  
+
+The non-RAG response about Kestra 1.1 features is best described as:  
+Vague, generic, or fabricated — the model guesses from training data
+
+## Question 3: Token usage — short summary
+What is the approximate output token count for multilingual_agent?
+```
+Multilingual Agent:
+- Input tokens: 282
+- Output tokens: 69
+- Total tokens: 351
+```
+**Answer**: 60-100 tokens
+
+## Question 4: Token usage — long summary
+Run `4_simple_agent.yaml` again with summary_length = long.
+```
+Multilingual Agent:
+- Input tokens: 282
+- Output tokens: 184
+- Total tokens: 466
+```
+Compare the `multilingual_agent` output token count to your result from Question 3. Roughly how many times more output tokens does the long summary use?  
+184/69=2.7
+
+**Answer**: 2-5x more
+
+## Question 5: Modifying a flow
+After changing english_brevity to ask for 3 sentences instead of 1, how does the output token count compare to the original 1-sentence version? (1 point)
+
+1 sentence
+```
+English Brevity Agent:
+- Input tokens: 199
+- Output tokens: 54
+- Total tokens: 253
+```
+
+3 sentences
+```
+English Brevity Agent:
+- Input tokens: 183
+- Output tokens: 101
+- Total tokens: 284
+```
+101/54=1.87
+
+**Answer**: 2-4x more
+
+## Question 6: Best Practices
+Based on what you learned in this module, for production workflows requiring deterministic, repeatable results with strict compliance requirements (e.g., financial reporting, workflows in highly regulated industries), which approach is most appropriate?
+
+**Answer**: Use traditional task-based workflows for predictability and auditability
